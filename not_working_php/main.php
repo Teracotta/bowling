@@ -1,5 +1,4 @@
 <?php
-
 class Main {
 	public function respond($message){
 		if ($message === "Hi") {
