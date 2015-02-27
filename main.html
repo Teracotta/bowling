@@ -30,8 +30,13 @@
 	<div id="gamePanel" hidden>
 		Frame Number: <p id="frameNumber"></p>
 		Ball Number: <p id="ballNumber"></p>
-		Input Score: <input id = "scoreField"></input><br />
-		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input><br />
+		Input Score: <input id = "scoreField"></input>
+		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input>
+		<input id="boardButton" type="button" value="SHOW SCORES" onclick="updateBoard()"></input>
+
+		<p id="comment" style="color: red" hidden></p><br />
+
+		<p id="scoreBoard"></p>
 	</div>
 
 </body>
