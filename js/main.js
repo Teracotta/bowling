@@ -111,8 +111,8 @@ function verifySubmittedScore(score) {
 }
 
 function endGame() {
+	information.innerHTML = "All the scores are now recorded! And the winner is...";
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
-	console.log("yey");
 	return;
 }
