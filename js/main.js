@@ -4,19 +4,31 @@ var playerCounter = 0;
 var frameCounter = 0;
 var ballCounter = 0;
 
+var namePanel;
+var userName;
+var startPanel;
+var players_printed;
+var information;
+
+var gamePanel;
+var frameNumber;
+var ballNumber;
+var scoreField;
+var scoreButton;
+
 function writeName() {
-	var namePanel = document.getElementById('namePanel');
-	var playerName = document.getElementById('nameField');
-	var startPanel = document.getElementById('startPanel');
-	var players_printed = document.getElementById('playerNames');
-    var information = document.getElementById('information');
+	namePanel = document.getElementById('namePanel');
+	userName = document.getElementById('nameField');
+	startPanel = document.getElementById('startPanel');
+	players_printed = document.getElementById('playerNames');
+    information = document.getElementById('information');
     
-    if(playerName.value == "") {
+    if(userName.value == "") {
     	information.innerHTML = "Please do not leave the name field blank.";
     	return;
     }
 
-	playerNames.push(playerName.value);
+	playerNames.push(userName.value);
 	information.innerHTML = "Player registered.";
 
 	if(checkIfCorrectNumberOfPlayers(playerNames.length) == "enough") {
@@ -51,9 +63,9 @@ function startGame() {
 }
 
 function gameOn() {
-	var gamePanel = document.getElementById('gamePanel');
-	var frameNumber = document.getElementById('frameNumber');
-	var ballNumber = document.getElementById('ballNumber');
+	gamePanel = document.getElementById('gamePanel');
+	frameNumber = document.getElementById('frameNumber');
+	ballNumber = document.getElementById('ballNumber');
 	frameNumber.innerHTML = frameCounter;
 	ballNumber.innerHTML = ballCounter;
 	gamePanel.hidden = false;
@@ -63,17 +75,44 @@ function gameOn() {
 }
 
 function submitScore() {
-	var scoreField = document.getElementById('scoreField');
-	if(scoreField.value == "") {
+	scoreField = document.getElementById('scoreField');
+	scoreButton = document.getElementById('scoreButton');
+
+	if(!verifySubmittedScore(scoreField.value)) 
+		return;
+
+	if(playerCounter+1 != playerNames.length) {
+		playerCounter++;
+		console.log(playerCounter);
+		information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
+	}
+	else {
+		endGame();
+	}
+}
+
+function verifySubmittedScore(score) {
+	if(score == "") {
     	information.innerHTML = "Please do not leave the score field blank.";
-    	return;
+    	return false;
     }
-	if (isNaN(scoreField.value)) 
+
+	if (isNaN(score)) 
 	{
 		information.innerHTML = "Please input only numeric values in the score field.";
-		return;
+		return false;
 	}
-	playerCounter++;
-	console.loeg(playerCounter);
-	information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
+
+	if (score < 0 || score > 10 || score % 1 != 0) {
+		information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (0-10).";
+		return false;
+	}
+	return true;
+}
+
+function endGame() {
+	scoreField.disabled = true;
+	scoreButton.disabled = true;
+	console.log("yey");
+	return;
 }
