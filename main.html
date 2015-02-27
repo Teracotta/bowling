@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<script type="text/javascript" src="js/main.js"></script>
+
+<title> Virtual Bowling Scoring System </title>
+</head>
+<body>
+	<h2>Information/Updates:</h2><h3 id="information">Welcome to the Virtual Bowling Scoring System!</h3>
+
+	<hr />
+
+	Players registered:
+	<p id="playerNames">None.</p>
+
+	<hr />
+
+	<div id="namePanel">
+		Please input the player's name (minium 2; maximum 6):
+		<input id = "nameField" type="text"></input><br />
+		<input id = "nameButton" type="button" value="SUBMIT NAME" onclick="writeName()"></input><br />
+	</div>
+
+	<div id="startPanel" hidden>
+		To start the scoring of the game, please click below: <br />
+		<input id="startButton" type="button" value="START" onclick="startGame()"></input><br /><br />
+	</div>
+
+	<div id="gamePanel" hidden>
+		Frame Number: <p id="frameNumber"></p>
+		Ball Number: <p id="ballNumber"></p>
+		Input Score: <input id = "scoreField"></input><br />
+		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input><br />
+	</div>
+
+</body>
+</html>
