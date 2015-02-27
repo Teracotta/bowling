@@ -17,6 +17,7 @@ var frameNumber;
 var ballNumber;
 var scoreField;
 var scoreButton;
+var scoreBoard;
 var maxPins;
 
 function writeName() {
@@ -105,8 +106,10 @@ function submitScore() {
 			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
 				ballCounter++;
 				console.log("maxPins: " + maxPins);
-
-				//game.push();
+				console.log(game[playerCounter]["currentScore"]);
+				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
+				game[playerCounter]["ballNo"] = frameCounter;
+				game[playerCounter]["frameNo"] = ballCounter;
 			}
 			else {
 				if(maxPins == 0) {
@@ -119,6 +122,11 @@ function submitScore() {
 						comment.innerHTML = "SPARE!";
 					}
 				}
+				console.log("maxPins: " + maxPins);
+				console.log(game[playerCounter]["currentScore"]);
+				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
+				game[playerCounter]["ballNo"] = frameCounter;
+				game[playerCounter]["frameNo"] = ballCounter;
 				ballCounter = 1;
 				playerCounter++;							// next player
 				maxPins = 10;
@@ -134,6 +142,7 @@ function submitScore() {
 		else {
 			frameNumber.innerHTML = frameCounter;
 			ballNumber.innerHTML = ballCounter;
+			console.log(game);
 			information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
 		}
 	}
@@ -167,4 +176,14 @@ function endGame() {
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
 	return;
+}
+
+function updateBoard() {
+	scoreBoard = document.getElementById('scoreBoard');
+    var index;
+    var text = "<tr><td>Name</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>Score</td></tr>";
+    for (index = 0; index < game.length; index++) {
+        text += "<tr><td>" + game[index]["name"] + "</td></tr>";
+    }
+    scoreBoard.innerHTML = text;
 }
