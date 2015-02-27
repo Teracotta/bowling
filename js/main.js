@@ -69,6 +69,7 @@ function writeName() {
 		information.innerHTML = information.innerHTML + " That's the maximum number of players - let's start the game!";
     }
 	players_printed.innerHTML = playerNames.toString();
+	userName.value="";
 }
 
 function checkIfCorrectNumberOfPlayers(numberOfNames) {
@@ -129,8 +130,8 @@ function submitScore() {
 					if(scoreField.value == 10) {
 						comment.innerHTML = "STRIKE!";
 						game[playerCounter][frameCounter]["strike"] = true;
-						if(ballCounter==2)
-							game[playerCounter][frameCounter][ballCounter] = "-";
+						if(ballCounter == 1)
+							game[playerCounter][frameCounter][2] = "-";
 					}
 					else {
 						comment.innerHTML = "SPARE!";
@@ -158,6 +159,8 @@ function submitScore() {
 			frameNumber.innerHTML = frameCounter;
 			ballNumber.innerHTML = ballCounter;
 			console.log(game);
+			console.log(game[playerCounter][1]);
+			console.log(game[playerCounter][1][1]);
 			updateBoard();
 			information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
 		}
@@ -166,6 +169,7 @@ function submitScore() {
 
 		endGame();
 	}
+	scoreField.value = "";
 }
 
 function verifySubmittedScore(score) {
