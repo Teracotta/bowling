@@ -1,6 +1,7 @@
 var playerNames = new Array();
 var game = new Array();
 var playerScore;
+var oneThrow;
 var playerCounter = 0;
 var frameCounter = 1;		// added 1 for better user understanding (in .html)
 var ballCounter = 1;		// added 1 for better user understanding (in .html)
@@ -33,11 +34,25 @@ function writeName() {
     }
 
 	playerNames.push(userName.value);
+	oneThrow = {
+		1: 0,
+		2: 0,
+		spare: false,
+		strike: false
+	}
 	playerScore = {
 		name: userName.value, 
-		currentScore: 0, 
-		frameNo: 0,
-		ballNo: 0
+		currentScore: 0,
+		1: oneThrow,
+		2: oneThrow,
+		3: oneThrow,
+		4: oneThrow,
+		5: oneThrow,
+		6: oneThrow,
+		7: oneThrow,
+		8: oneThrow,
+		9: oneThrow,
+		10: oneThrow
 	};
 	game.push(playerScore);
 	console.log(game);
@@ -71,6 +86,7 @@ function startGame() {
 	startPanel.hidden = true;
 	information.innerHTML = "The game begins!";
 
+	updateBoard();
 	gameOn();
 }
 
@@ -92,7 +108,6 @@ function submitScore() {
 	scoreField = document.getElementById('scoreField');
 	scoreButton = document.getElementById('scoreButton');
 	comment = document.getElementById('comment');
-	comment.hidden = true;
 
 	if(!verifySubmittedScore(scoreField.value)) 
 		return;
@@ -102,31 +117,31 @@ function submitScore() {
 		console.log("player counter " + playerCounter);
 		console.log("ball counter " + ballCounter);
 		maxPins = maxPins - scoreField.value;
+		comment.innerHTML = "...";
 
 			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
-				ballCounter++;
-				console.log("maxPins: " + maxPins);
-				console.log(game[playerCounter]["currentScore"]);
+				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
-				game[playerCounter]["ballNo"] = frameCounter;
-				game[playerCounter]["frameNo"] = ballCounter;
+				ballCounter++;
 			}
 			else {
 				if(maxPins == 0) {
 					if(scoreField.value == 10) {
-						comment.hidden = false;
 						comment.innerHTML = "STRIKE!";
-					}	
+						game[playerCounter][frameCounter]["strike"] = true;
+						if(ballCounter==2)
+							game[playerCounter][frameCounter][ballCounter] = "-";
+					}
 					else {
-						comment.hidden = false;
 						comment.innerHTML = "SPARE!";
+						game[playerCounter][frameCounter]["spare"] = true;
 					}
 				}
+				
 				console.log("maxPins: " + maxPins);
 				console.log(game[playerCounter]["currentScore"]);
+				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
-				game[playerCounter]["ballNo"] = frameCounter;
-				game[playerCounter]["frameNo"] = ballCounter;
 				ballCounter = 1;
 				playerCounter++;							// next player
 				maxPins = 10;
@@ -143,6 +158,7 @@ function submitScore() {
 			frameNumber.innerHTML = frameCounter;
 			ballNumber.innerHTML = ballCounter;
 			console.log(game);
+			updateBoard();
 			information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
 		}
 	}
@@ -180,10 +196,12 @@ function endGame() {
 
 function updateBoard() {
 	scoreBoard = document.getElementById('scoreBoard');
-    var index;
-    var text = "<tr><td>Name</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>Score</td></tr>";
-    for (index = 0; index < game.length; index++) {
-        text += "<tr><td>" + game[index]["name"] + "</td></tr>";
+    var text = "<tr><th>Name</th><th colspan=\"2\">1</th><th colspan=\"2\">2</th><th colspan=\"2\">3</th><th colspan=\"2\">4</th><th colspan=\"2\">5</th><th colspan=\"2\">6</th><th colspan=\"2\">7</th><th colspan=\"2\">8</th><th colspan=\"2\">9</th><th colspan=\"2\">10</th><th>Score</th></tr>";
+    for (var i = 0; i < game.length; i++) {
+        text += "<tr><td>" + game[i]["name"] + "</td>";
+        for(var j = 1; j <= 10; j++)
+        	text += "<td>" + game[i][j][1] + "</td><td>" + game[i][j][2] + "</td>";
+        text += "<td>" + game[i]["currentScore"] + "</td></tr>";
     }
     scoreBoard.innerHTML = text;
 }
