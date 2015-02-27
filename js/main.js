@@ -1,8 +1,9 @@
 var playerNames = new Array();
 var game = new Array();
+var playerScore;
 var playerCounter = 0;
-var frameCounter = 0;
-var ballCounter = 0;
+var frameCounter = 1;		// added 1 for better user understanding (in .html)
+var ballCounter = 1;		// added 1 for better user understanding (in .html)
 
 var namePanel;
 var userName;
@@ -29,6 +30,14 @@ function writeName() {
     }
 
 	playerNames.push(userName.value);
+	playerScore = {
+		name: userName.value, 
+		currentScore: 0, 
+		frameNo: 0,
+		ballNo: 0
+	};
+	game.push(playerScore);
+	console.log(game);
 	information.innerHTML = "Player registered.";
 
 	if(checkIfCorrectNumberOfPlayers(playerNames.length) == "enough") {
@@ -81,12 +90,41 @@ function submitScore() {
 	if(!verifySubmittedScore(scoreField.value)) 
 		return;
 
-	if(playerCounter+1 != playerNames.length) {
-		playerCounter++;
-		console.log(playerCounter);
-		information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
+	// next frame
+	if(frameCounter+1 != 12) {
+		console.log("frame counter " + frameCounter);
+		console.log("player counter " + playerCounter);
+		console.log("ball counter " + ballCounter);
+		
+			// next ball
+			if(ballCounter+1 != 3) {
+				ballCounter++;
+
+
+
+				//game.push();
+			}
+			else {
+				ballCounter = 1;
+				// next player
+				playerCounter++;
+				if(playerCounter==playerNames.length) {
+					playerCounter = 0;
+					frameCounter++;
+				}
+			}
+		if(frameCounter==11) {
+			frameNumber.innerHTML = "COMPLETE";
+			ballNumber.innerHTML = "COMPLETE";
+		}
+		else {
+			frameNumber.innerHTML = frameCounter;
+			ballNumber.innerHTML = ballCounter;
+			information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
+		}
 	}
 	else {
+
 		endGame();
 	}
 }
