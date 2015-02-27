@@ -63,5 +63,17 @@ function gameOn() {
 }
 
 function submitScore() {
-
+	var scoreField = document.getElementById('scoreField');
+	if(scoreField.value == "") {
+    	information.innerHTML = "Please do not leave the score field blank.";
+    	return;
+    }
+	if (isNaN(scoreField.value)) 
+	{
+		information.innerHTML = "Please input only numeric values in the score field.";
+		return;
+	}
+	playerCounter++;
+	console.loeg(playerCounter);
+	information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
 }
