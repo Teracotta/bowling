@@ -10,12 +10,14 @@ var userName;
 var startPanel;
 var players_printed;
 var information;
+var comment;
 
 var gamePanel;
 var frameNumber;
 var ballNumber;
 var scoreField;
 var scoreButton;
+var maxPins;
 
 function writeName() {
 	namePanel = document.getElementById('namePanel');
@@ -66,7 +68,7 @@ function startGame() {
 	namePanel.hidden = true;
 	nameField.hidden = true;
 	startPanel.hidden = true;
-	information.innerHTML = "The game starts!";
+	information.innerHTML = "The game begins!";
 
 	gameOn();
 }
@@ -75,9 +77,11 @@ function gameOn() {
 	gamePanel = document.getElementById('gamePanel');
 	frameNumber = document.getElementById('frameNumber');
 	ballNumber = document.getElementById('ballNumber');
+
 	frameNumber.innerHTML = frameCounter;
 	ballNumber.innerHTML = ballCounter;
 	gamePanel.hidden = false;
+	maxPins = 10;
 
 
 	information.innerHTML = information.innerHTML + " " + playerNames[playerCounter].toString() + ", please enter your score.";
@@ -86,36 +90,46 @@ function gameOn() {
 function submitScore() {
 	scoreField = document.getElementById('scoreField');
 	scoreButton = document.getElementById('scoreButton');
+	comment = document.getElementById('comment');
+	comment.hidden = true;
 
 	if(!verifySubmittedScore(scoreField.value)) 
 		return;
 
-	// next frame
-	if(frameCounter+1 != 12) {
+	if(frameCounter+1 != 12) {								// next frame
 		console.log("frame counter " + frameCounter);
 		console.log("player counter " + playerCounter);
 		console.log("ball counter " + ballCounter);
-		
-			// next ball
-			if(ballCounter+1 != 3) {
+		maxPins = maxPins - scoreField.value;
+
+			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
 				ballCounter++;
-
-
+				console.log("maxPins: " + maxPins);
 
 				//game.push();
 			}
 			else {
+				if(maxPins == 0) {
+					if(scoreField.value == 10) {
+						comment.hidden = false;
+						comment.innerHTML = "STRIKE!";
+					}	
+					else {
+						comment.hidden = false;
+						comment.innerHTML = "SPARE!";
+					}
+				}
 				ballCounter = 1;
-				// next player
-				playerCounter++;
+				playerCounter++;							// next player
+				maxPins = 10;
 				if(playerCounter==playerNames.length) {
 					playerCounter = 0;
 					frameCounter++;
 				}
 			}
-		if(frameCounter==11) {
-			frameNumber.innerHTML = "COMPLETE";
-			ballNumber.innerHTML = "COMPLETE";
+		if(frameCounter == 11) {
+			frameNumber.innerHTML = "-- GAME COMPLETE --";
+			ballNumber.innerHTML = "-- GAME COMPLETE --";
 		}
 		else {
 			frameNumber.innerHTML = frameCounter;
@@ -141,8 +155,8 @@ function verifySubmittedScore(score) {
 		return false;
 	}
 
-	if (score < 0 || score > 10 || score % 1 != 0) {
-		information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (0-10).";
+	if (score < 0 || score > maxPins || score % 1 != 0) {
+		information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (right now it can be between 0 and " + maxPins + ").";
 		return false;
 	}
 	return true;
