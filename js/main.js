@@ -1,7 +1,6 @@
 var playerNames = new Array();
 var game = new Array();
 var playerScore;
-var oneThrow;
 var playerCounter = 0;
 var frameCounter = 1;		// added 1 for better user understanding (in .html)
 var ballCounter = 1;		// added 1 for better user understanding (in .html)
@@ -34,25 +33,69 @@ function writeName() {
     }
 
 	playerNames.push(userName.value);
-	oneThrow = {
-		1: 0,
-		2: 0,
-		spare: false,
-		strike: false
-	}
 	playerScore = {
 		name: userName.value, 
 		currentScore: 0,
-		1: oneThrow,
-		2: oneThrow,
-		3: oneThrow,
-		4: oneThrow,
-		5: oneThrow,
-		6: oneThrow,
-		7: oneThrow,
-		8: oneThrow,
-		9: oneThrow,
-		10: oneThrow
+		1: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		2: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		3: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		4: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		5: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		6: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		7: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		8: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		9: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			},
+		10: {
+			1: 0,
+			2: 0,
+			spare: false,
+			strike: false
+			}
 	};
 	game.push(playerScore);
 	console.log(game);
@@ -121,6 +164,7 @@ function submitScore() {
 		comment.innerHTML = "...";
 
 			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
+				delete game[playerCounter][frameCounter][ballCounter];
 				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
 				ballCounter++;
@@ -141,6 +185,7 @@ function submitScore() {
 				
 				console.log("maxPins: " + maxPins);
 				console.log(game[playerCounter]["currentScore"]);
+				delete game[playerCounter][frameCounter][ballCounter];
 				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 				game[playerCounter]["currentScore"] = game[playerCounter]["currentScore"] + parseInt(scoreField.value);
 				ballCounter = 1;
