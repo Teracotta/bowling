@@ -365,36 +365,39 @@ function endGame() {
 	var topPlayers = new Array();
 	for (var i = 0; i < game.length; i++) topPlayers[i] = "";
 
+	console.log(topPlayers);
+	console.log(topScores);
 	frameNumber.innerHTML = "-- GAME COMPLETE --";
 	ballNumber.innerHTML = "-- GAME COMPLETE --";
 
-	for (var i = 0; i < game.length; i++) {
-		if(game[i].totalScore > topScores[0]) {
-			topScores = [];
-			topScores[0] = game[i].totalScore;
-			topPlayers = [];
-			topPlayers[0] = game[i].name;
-		}
+	for (var i = 0; i < game.length; i++) {			
 		if(game[i].totalScore == topScores[0]) {
 			topScores[topScores.length] = game[i].totalScore;
 			topPlayers[topPlayers.length] = game[i].name;
-		}
+		}	
+		if(game[i].totalScore > topScores[0]) {
+			topScores = new Array();
+			topScores[0] = game[i].totalScore;
+			topPlayers = new Array();
+			topPlayers[0] = game[i].name;
+		}		
+
 	}
+		console.log(topPlayers);
+	console.log(topScores);
 
 	if(topScores.length == 1)
-		information.innerHTML = "All the scores are now recorded! And the winner is...";
+		information.innerHTML = "All the scores are now recorded! And the winner is " + topPlayers[0] + " with score " + topScores[0] + ". Congratulations!";
 	else if(topScores.length = game.length)
-		information.innerHTML = "All the scores are now recorded! Everyone has the top score, everyone is a winner!";
+		information.innerHTML = "All the scores are now recorded! Everyone has the top score, everyone is a winner! Congratulations!";
 	else {
 		information.innerHTML = "All the scores are now recorded! There is more than one winner! They are: ";
 		for(var i = 0; i < topScores.length; i++)
 			information.innerHTML += topPlayers[i] + " (score " + topScores[i] + "),";
-		// information.innerHTML = information.innerHTML.substring(0, str.length - 1);
-		 information.innerHTML = information.innerHTML.value.replace(/,$/, "") + ".";
+		information.innerHTML = information.innerHTML.value.replace(/,$/, "") + ". Congratulations !";
 	}
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
-
 
 	return;
 }
