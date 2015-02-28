@@ -9,6 +9,7 @@ var playerScore;
 var playerCounter = 0;
 var frameCounter = 1;		// added 1 for better user understanding (in .html)
 var ballCounter = 1;		// added 1 for better user understanding (in .html)
+var reachedPlayer;
 
 var namePanel;
 var userName;
@@ -27,6 +28,7 @@ var scoreButton;
 var scoreBoard;
 var maxPins;
 var noExtraRounds;
+var extraRoundHappening;
 
 function writeName() {
 	namePanel = document.getElementById('namePanel');
@@ -159,6 +161,7 @@ function gameOn() {
 	restartButton.disabled = false;
 	scoreField.focus();
 	maxPins = 10;
+	extraRoundHappening = false;
 
 	information.innerHTML = information.innerHTML + " " + playerNames[playerCounter].toString() + ", please enter your score.";
 }
@@ -166,10 +169,9 @@ function gameOn() {
 function submitScore() {
 	scoreButton = document.getElementById('scoreButton');
 	comment = document.getElementById('comment');
+
 	noExtraRounds = true;
-
-
-	if(frameCounter < 11) {	
+	if(frameCounter < 11 && !extraRoundHappening) {	
 		if(!verifySubmittedScore(scoreField.value)) 
 			return;
 		maxPins = maxPins - scoreField.value;
@@ -192,27 +194,42 @@ function submitScore() {
 		else {
 			if(maxPins == 0) {
 				if(scoreField.value == 10 && ballCounter == 1) {
+
 					comment.innerHTML = "STRIKE!";
 					game[playerCounter][frameCounter]["strike"] = true;
 					game[playerCounter][frameCounter][1] = "";
 					game[playerCounter][frameCounter][2] = "X";
+
+					if(frameCounter == 10) {
+						extraRoundHappening = true;
+						noExtraRounds = false;
+						frameCounter++;
+					}
 				}
 				else {
 					comment.innerHTML = "SPARE!";
 					game[playerCounter][frameCounter]["spare"] = true;
 					game[playerCounter][frameCounter][2] = "/";
+					if(frameCounter == 10) {
+						extraRoundHappening = true;
+						noExtraRounds = false;
+						frameCounter++;
+					}
 				}
 			}
 			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 			if(!(game[playerCounter][frameCounter]["spare"] || game[playerCounter][frameCounter]["strike"]))
 				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
-
-			ballCounter = 1;
-			playerCounter++;							// next player
 			maxPins = 10;
-			if(playerCounter == playerNames.length) {
-				playerCounter = 0;
-				frameCounter++;
+			ballCounter = 1;
+			if(!extraRoundHappening) {
+				
+				playerCounter++;							// next player
+				reachedPlayer = playerCounter-1;
+				if(playerCounter == playerNames.length) {
+					playerCounter = 0;
+					frameCounter++;
+				}
 			}
 		}
 		updateNews();
@@ -222,7 +239,6 @@ function submitScore() {
 	// extra points possible
 	else {
 
-		//else {
 		if((game[playerCounter][10]["spare"] || game[playerCounter][10]["strike"]) && frameCounter != 13) {
 			if (scoreField.value == "" || parseInt(scoreField.value) < 0 || scoreField.value % 1 != 0) {
 				information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (max: 10).";
@@ -252,20 +268,15 @@ function submitScore() {
 			frameCounter++;
 		}
 		if(frameCounter == 13 && playerCounter+1 != playerNames.length) {
-			frameCounter = 11;
+			frameCounter = 10;
 			playerCounter++;
+			extraRoundHappening = false;
 		}
 		updateNews();
 	}
-
-		if((!(game[playerCounter][10]["spare"]) && !(game[playerCounter][10]["strike"])) && frameCounter == 11 ) {
-
-	}
-
-
-	if(frameCounter == 11) {		// no final strike or spare
-		checkIfPlayerHasExtraRounds();
-		for (var i = 0; i < game.length; i++) {
+	if(frameCounter == 11 ) {		// no final strike or spare
+		// checkIfPlayerHasExtraRounds();
+		for (var i = reachedPlayer; i < game.length; i++) {
 			if(game[i][10]["strike"] || game[i][10]["spare"]) {
 				noExtraRounds = false;
 				break;
@@ -339,9 +350,11 @@ function restart() {
 		updateBoard();
 		namePanel.hidden = false;
 		nameField.hidden = false;
+		nameField.value = "";
 		startPanel.hidden = false;
 		startButton.disabled = true;
 		scoreField.disabled = false;
+		scoreField.value = "";
 		restartButton.disabled = true;
 		scoreButton.disabled = false;
 		gamePanel.hidden = true;
@@ -387,8 +400,10 @@ function endGame() {
 			information.innerHTML += topPlayers[i] + " (score: " + topScores[i] + "),";
 		information.innerHTML = information.innerHTML.value.replace(/, $/, "") + ". Congratulations !";
 	}
+	scoreField.value = "";
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
+	
 
 	return;
 }
