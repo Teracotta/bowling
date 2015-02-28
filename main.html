@@ -12,33 +12,29 @@
 
 	<hr />
 
-	Players registered:
+	<b>Players registered:</b>
 	<p id="playerNames">None.</p>
 
 	<hr />
 
 	<div id="namePanel">
-		Please input the player's name (minium 2; maximum 6):
-		<input id = "nameField" type="text" onkeydown="if (event.keyCode == 13) document.getElementById('nameButton').click()" autofocus></input><br />
-		<input id = "nameButton" type="button" value="SUBMIT NAME" onclick="writeName()"></input><br />
-	</div>
-
-	<div id="startPanel">
-		To start the scoring of the game, please click below: <br />
-		<input id="startButton" type="button" value="START" onclick="startGame()" disabled></input><br /><br />
+		<b>Please input the player's name (minium 2; maximum 6):</b>
+		<input id = "nameField" type="text" onkeydown="if (event.keyCode == 13) document.getElementById('nameButton').click()" autofocus></input>
+		<input id = "nameButton" type="button" value="SUBMIT NAME" onclick="writeName()"></input>
+		<input id="startButton" type="button" value="START THE GAME SCORING" onclick="startGame()" disabled></input>
 	</div>
 
 	<div id="gamePanel" hidden>
-		Frame Number: <p id="frameNumber"></p>
-		Ball Number: <p id="ballNumber"></p>
-		Input Score: <input id = "scoreField" onkeydown="if (event.keyCode == 13) document.getElementById('scoreButton').click()"></input>
-		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input>
-
-		<p id="comment" style="color: red">...</p><br />
-
+		<b>Input Score:</b> <input id = "scoreField" onkeydown="if (event.keyCode == 13) document.getElementById('scoreButton').click()"></input>
+		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input><br />
+		<b>Frame Number:</b> <p id="frameNumber"></p>
+		<b>Ball Number:</b> <p id="ballNumber"></p>
+		<div id="bottomPanel">
+		<p id="comment" style="color: red"><b>...</b></p><br />
 		<table id="scoreBoard"></table><br />
-
+		<input id="restartButton" type="button" value="RESTART" onclick="restart()" disabled></input>
 	</div>
-	<input id="restartButton" type="button" value="RESTART" onclick="restart()" disabled></input>
+	</div>
+
 </body>
 </html>

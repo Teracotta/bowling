@@ -14,7 +14,6 @@ var reachedPlayer;
 var namePanel;
 var userName;
 var startButton;
-var startPanel;
 var players_printed;
 var information;
 var comment;
@@ -38,7 +37,6 @@ function writeName() {
 	namePanel = document.getElementById('namePanel');
 	userName = document.getElementById('nameField');
 	startButton = document.getElementById('startButton');
-	startPanel = document.getElementById('startPanel');
 	players_printed = document.getElementById('playerNames');
     information = document.getElementById('information');
     
@@ -151,7 +149,6 @@ function checkIfCorrectNumberOfPlayers(numberOfNames) {
 function startGame() {
 	namePanel.hidden = true;
 	nameField.hidden = true;
-	startPanel.hidden = true;
 	information.innerHTML = "The game begins!";
 
 	updateBoard();
@@ -360,7 +357,6 @@ function restart() {
 		namePanel.hidden = false;
 		nameField.hidden = false;
 		nameField.value = "";
-		startPanel.hidden = false;
 		startButton.disabled = true;
 		scoreField.disabled = false;
 		scoreField.value = "";
