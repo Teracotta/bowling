@@ -357,8 +357,10 @@ function reset() {
 		game = new Array();
 		updateBoard();
 		namePanel.hidden = false;
+		nameField.disabled = false;
 		nameField.hidden = false;
 		nameField.value = "";
+		nameButton.disabled = false;
 		startButton.disabled = true;
 		scoreField.disabled = false;
 		scoreField.value = "";
