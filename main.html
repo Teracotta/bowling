@@ -19,19 +19,19 @@
 
 	<div id="namePanel">
 		Please input the player's name (minium 2; maximum 6):
-		<input id = "nameField" type="text"></input><br />
+		<input id = "nameField" type="text" onkeydown="if (event.keyCode == 13) document.getElementById('nameButton').click()" autofocus></input><br />
 		<input id = "nameButton" type="button" value="SUBMIT NAME" onclick="writeName()"></input><br />
 	</div>
 
-	<div id="startPanel" hidden>
+	<div id="startPanel">
 		To start the scoring of the game, please click below: <br />
-		<input id="startButton" type="button" value="START" onclick="startGame()"></input><br /><br />
+		<input id="startButton" type="button" value="START" onclick="startGame()" disabled></input><br /><br />
 	</div>
 
 	<div id="gamePanel" hidden>
 		Frame Number: <p id="frameNumber"></p>
 		Ball Number: <p id="ballNumber"></p>
-		Input Score: <input id = "scoreField"></input>
+		Input Score: <input id = "scoreField" onkeydown="if (event.keyCode == 13) document.getElementById('scoreButton').click()"></input>
 		<input id="scoreButton" type="button" value="SUBMIT SCORE" onclick="submitScore()"></input>
 
 		<p id="comment" style="color: red">...</p><br />
