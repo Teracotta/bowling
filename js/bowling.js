@@ -30,6 +30,10 @@ var maxPins;
 var noExtraRounds;
 var extraRoundHappening;
 
+/*
+*	This function stores initialises the collections of players' names and their scores (and all is placed in
+*	game collection). It also verifies the number of players registered for the game.
+*/
 function writeName() {
 	namePanel = document.getElementById('namePanel');
 	userName = document.getElementById('nameField');
@@ -128,6 +132,9 @@ function writeName() {
 	userName.focus();
 }
 
+/*
+*	This function returns a 'comment' stating whether there is enough (or too many) players trying to be registered.
+*/
 function checkIfCorrectNumberOfPlayers(numberOfNames) {
 	if(numberOfNames == 6) {
 		return "max";
@@ -137,6 +144,10 @@ function checkIfCorrectNumberOfPlayers(numberOfNames) {
 	}
 }
 
+/*
+*	This function stores initialises several game-related components and calls for preparation of the scoreBoard.
+*	It also begins the scoring.
+*/
 function startGame() {
 	namePanel.hidden = true;
 	nameField.hidden = true;
@@ -144,10 +155,6 @@ function startGame() {
 	information.innerHTML = "The game begins!";
 
 	updateBoard();
-	gameOn();
-}
-
-function gameOn() {
 	gamePanel = document.getElementById('gamePanel');
 	frameNumber = document.getElementById('frameNumber');
 	ballNumber = document.getElementById('ballNumber');
@@ -166,11 +173,15 @@ function gameOn() {
 	information.innerHTML = information.innerHTML + " " + playerNames[playerCounter].toString() + ", please enter your score.";
 }
 
+/*
+*	This function calls for the submitted score verification - if approved, stores it in the collections.
+*	Once the operation on all the submitted input (limit given here) is finished, it calls for the game ending function.
+*/
 function submitScore() {
 	scoreButton = document.getElementById('scoreButton');
 	comment = document.getElementById('comment');
-
 	noExtraRounds = true;
+
 	if(frameCounter < 11 && !extraRoundHappening) {	
 		if(!verifySubmittedScore(scoreField.value)) 
 			return;
@@ -186,15 +197,14 @@ function submitScore() {
 		if((frameCounter != 1 && game[playerCounter][frameCounter-1]["spare"]) && ballCounter == 1) {
 			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 		}
-		if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
+		if(ballCounter+1 != 3 && maxPins != 0) {
 			game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
-			ballCounter++;
+			ballCounter++;									// next ball
 		}
 		else {
 			if(maxPins == 0) {
 				if(scoreField.value == 10 && ballCounter == 1) {
-
 					comment.innerHTML = "STRIKE!";
 					game[playerCounter][frameCounter]["strike"] = true;
 					game[playerCounter][frameCounter][1] = "";
@@ -223,9 +233,8 @@ function submitScore() {
 			maxPins = 10;
 			ballCounter = 1;
 			if(!extraRoundHappening) {
-				
 				playerCounter++;							// next player
-				reachedPlayer = playerCounter-1;
+				reachedPlayer = playerCounter-1;			// this variable stores the ID of the last analysed player
 				if(playerCounter == playerNames.length) {
 					playerCounter = 0;
 					frameCounter++;
@@ -236,9 +245,7 @@ function submitScore() {
 		frameNumber.innerHTML = frameCounter;
 		ballNumber.innerHTML = ballCounter;
 	}
-	// extra points possible
-	else {
-
+	else {													// extra throws scores analysis/save
 		if((game[playerCounter][10]["spare"] || game[playerCounter][10]["strike"]) && frameCounter != 13) {
 			if (scoreField.value == "" || parseInt(scoreField.value) < 0 || scoreField.value % 1 != 0) {
 				information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (max: 10).";
@@ -248,15 +255,13 @@ function submitScore() {
 				comment.innerHTML = "EXTRA STRIKE!";
 			else
 				comment.innerHTML = "...";
-			// last spare - 1 extra round
-			if(game[playerCounter][10]["spare"]) {
+			if(game[playerCounter][10]["spare"]) {			// 10th frame = spare -> 1 extra round
 				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 				game[playerCounter][frameCounter] = parseInt(scoreField.value);
 				frameCounter++;
 				noExtraRounds = true;
 			}
-			// last strike - 2 extra rounds
-			else {
+			else {											// 10th frame = strike -> 2 extra rounds
 				if(frameCounter == 11) {
 					game[playerCounter]["totalScore"] += parseInt(scoreField.value) * 2;
 				}
@@ -274,16 +279,15 @@ function submitScore() {
 		}
 		updateNews();
 	}
-	if(frameCounter == 11 ) {		// no final strike or spare
-		// checkIfPlayerHasExtraRounds();
+	if(frameCounter == 11 ) {
 		for (var i = reachedPlayer; i < game.length; i++) {
 			if(game[i][10]["strike"] || game[i][10]["spare"]) {
-				noExtraRounds = false;
+				noExtraRounds = false;	// mark if any of the 10th frame scores of the latter players were 'strike' or 'spare'
 				break;
 			}
 		}
 		if(noExtraRounds) {
-			endGame();
+			endGame();					// if no other final 'strikes' or 'spares' occurred, finish the game
 			return;
 		}
 	}
@@ -294,16 +298,10 @@ function submitScore() {
 	scoreField.focus();
 }
 
-function checkIfPlayerHasExtraRounds() {
-	if(!game[playerCounter][10]["spare"] && !game[playerCounter][10]["strike"]) {
-		playerCounter++;
-		if(playerCounter == game.length)
-			endGame();
-		updateNews();
-		checkIfPlayerHasExtraRounds();
-	}
-}
-
+/*
+*	This function calls for scoreboard update, sets a new headline (information/updates) and values for the
+*	frame and ball number labels.
+*/
 function updateNews() {
 	updateBoard();
 	information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
@@ -311,6 +309,10 @@ function updateNews() {
 	ballNumber.innerHTML = ballCounter;
 }
 
+/*
+*	This function verifies if the input submitted by the user meets several criteria: is a number, an integer,
+*	and its value isbetween 0 and the number of pins left to be knocked over in a given frame.
+*/
 function verifySubmittedScore(score) {
 	if(score == "") {
     	information.innerHTML = "Please do not leave the score field blank.";
@@ -330,6 +332,9 @@ function verifySubmittedScore(score) {
 	return true;
 }
 
+/*
+*	This function creates and then populates the table (scoreBoard) for the user to see the progress.
+*/
 function updateBoard() {
 	scoreBoard = document.getElementById('scoreBoard');
     var text = "<tr><th>Name</th><th colspan=\"2\">1</th><th colspan=\"2\">2</th><th colspan=\"2\">3</th><th colspan=\"2\">4</th><th colspan=\"2\">5</th><th colspan=\"2\">6</th><th colspan=\"2\">7</th><th colspan=\"2\">8</th><th colspan=\"2\">9</th><th colspan=\"2\">10</th><th>11 (extra)</th><th>12 (extra)</th><th>Score</th></tr>";
@@ -343,6 +348,10 @@ function updateBoard() {
     scoreBoard.innerHTML = text;
 }
 
+/*
+*	This function restarts/resets the game - removes all the data stored thus far, sets the DOM's state to
+*	what it was before the game begun (i.e. being disabled, focused, hidden, etc.).
+*/
 function restart() {
 	if (confirm("You are about to completely restart the game. Continue?")) {
 	   	playerNames = new Array();
@@ -367,6 +376,10 @@ function restart() {
 	}
 }
 
+/*
+*	This function finished the game (scoring), calculates who received the most points and informs of the winner(s).
+*	Several DOMs also become disabled/modified in content.
+*/
 function endGame() {
 	var topScores = new Array();
 	for (var i = 0; i < game.length; i++) topScores[i] = 0;
@@ -376,7 +389,7 @@ function endGame() {
 	frameNumber.innerHTML = "-- GAME COMPLETE --";
 	ballNumber.innerHTML = "-- GAME COMPLETE --";
 
-	for (var i = 0; i < game.length; i++) {			
+	for (var i = 0; i < game.length; i++) {	
 		if(game[i].totalScore == topScores[0]) {
 			topScores[topScores.length] = game[i].totalScore;
 			topPlayers[topPlayers.length] = game[i].name;
@@ -386,8 +399,7 @@ function endGame() {
 			topScores[0] = game[i].totalScore;
 			topPlayers = new Array();
 			topPlayers[0] = game[i].name;
-		}		
-
+		}
 	}
 
 	if(topScores.length == 1)
@@ -403,7 +415,5 @@ function endGame() {
 	scoreField.value = "";
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
-	
-
 	return;
 }
