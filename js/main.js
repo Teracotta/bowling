@@ -177,35 +177,37 @@ function submitScore() {
 		if((frameCounter != 1 && game[playerCounter][frameCounter-1]["spare"]) && ballCounter == 1) {
 			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 		}
-			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
-				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
-				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
-				ballCounter++;
-			}
-			else {
-				if(maxPins == 0) {
-					if(scoreField.value == 10 && ballCounter == 1) {
-						comment.innerHTML = "STRIKE!";
-						game[playerCounter][frameCounter]["strike"] = true;
-						game[playerCounter][frameCounter][1] = "";
-						game[playerCounter][frameCounter][2] = "X";
-					}
-					else {
-						comment.innerHTML = "SPARE!";
-						game[playerCounter][frameCounter]["spare"] = true;
-						game[playerCounter][frameCounter][2] = "/";
-					}
+		if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
+			game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
+			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
+			ballCounter++;
+		}
+		else {
+			if(maxPins == 0) {
+				if(scoreField.value == 10 && ballCounter == 1) {
+					comment.innerHTML = "STRIKE!";
+					game[playerCounter][frameCounter]["strike"] = true;
+					game[playerCounter][frameCounter][1] = "";
+					game[playerCounter][frameCounter][2] = "X";
 				}
-				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
+				else {
+					comment.innerHTML = "SPARE!";
+					game[playerCounter][frameCounter]["spare"] = true;
+					game[playerCounter][frameCounter][2] = "/";
+				}
+			}
+			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
+			game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 			
-				ballCounter = 1;
-				playerCounter++;							// next player
-				maxPins = 10;
-				if(playerCounter == playerNames.length) {
-					playerCounter = 0;
-					frameCounter++;
-				}
+			ballCounter = 1;
+			playerCounter++;							// next player
+			maxPins = 10;
+			if(playerCounter == playerNames.length) {
+				playerCounter = 0;
+				frameCounter++;
 			}
+		}
+		console.log("woo");
 		updateNews();
 		frameNumber.innerHTML = frameCounter;
 		ballNumber.innerHTML = ballCounter;
@@ -239,7 +241,6 @@ function submitScore() {
 		if(frameCounter == 13 && playerCounter+1 != playerNames.length) {
 			frameCounter = 11;
 			playerCounter++;
-			console.log("wooooooooooooooooooooooooooo");
 		}
 		updateNews();
 	}		
@@ -301,17 +302,20 @@ function updateBoard() {
 }
 
 function restart() {
-	playerNames = new Array();
-	game = new Array();
-	updateBoard();
-	namePanel.hidden = false;
-	nameField.hidden = false;
-	startPanel.hidden = false;
-	startButton.disabled = true;
-	gamePanel.hidden = true;
-	playerCounter = 0;
-	frameCounter = 1;
-	ballCounter = 1;
-	players_printed.innerHTML = "None";
-	information.innerHTML = "The game has been restarted. Welcome to the Virtual Bowling Scoring System!"
+	var r = confirm("You are about to completely restart the game. Continue?");
+	if (r == true) {
+	   	playerNames = new Array();
+		game = new Array();
+		updateBoard();
+		namePanel.hidden = false;
+		nameField.hidden = false;
+		startPanel.hidden = false;
+		startButton.disabled = true;
+		gamePanel.hidden = true;
+		playerCounter = 0;
+		frameCounter = 1;
+		ballCounter = 1;
+		players_printed.innerHTML = "None";
+		information.innerHTML = "The game has been restarted. Welcome to the Virtual Bowling Scoring System!"
+	}
 }
