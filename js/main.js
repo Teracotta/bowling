@@ -174,6 +174,10 @@ function submitScore() {
 			if((frameCounter != 2 && ballCounter != 2 && game[playerCounter][frameCounter-2]["strike"]))
 				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
 	}
+
+	if((frameCounter != 1 && game[playerCounter][frameCounter-1]["spare"]) && ballCounter == 1) {
+		game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+	}
 		if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
 			game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
 			game[playerCounter]["currentScore"] += parseInt(scoreField.value);
