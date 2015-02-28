@@ -1,3 +1,6 @@
+body {
+	font-family: arial;
+}
 table {
   border-collapse: collapse;
 }
@@ -7,4 +10,17 @@ td, th {
   padding: 0.5rem;
   text-align: center;
   width: 40px;
+}
+
+input[type="button"]{
+	background-color:#2dabf9;
+	cursor:pointer;
+	color:#ffffff;
+	font-size:14px;
+	padding:11px 23px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+input[type="button"]:hover{
+	background-color:#06d3bb;
 }
