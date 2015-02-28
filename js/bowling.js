@@ -14,6 +14,7 @@ var reachedPlayer;
 var namePanel;
 var userName;
 var startButton;
+var nameButton;
 var players_printed;
 var information;
 var comment;
@@ -39,6 +40,7 @@ function writeName() {
 	startButton = document.getElementById('startButton');
 	players_printed = document.getElementById('playerNames');
     information = document.getElementById('information');
+    nameButton = document.getElementById('nameButton');
     
     if(userName.value == "") {
     	information.innerHTML = "Please do not leave the name field blank.";
@@ -121,8 +123,8 @@ function writeName() {
 	}
     if(checkIfCorrectNumberOfPlayers(playerNames.length) == "max") {
     	startButton.disabled = false;
-		namePanel.hidden = true;
-		nameField.hidden = true;
+		nameButton.disabled = true;
+		nameField.disabled = true;
 		information.innerHTML = information.innerHTML + " That's the maximum number of players - let's start the game!";
     }
 	players_printed.innerHTML = playerNames.toString().replace(",", ", ");
