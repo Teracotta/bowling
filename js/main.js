@@ -98,8 +98,8 @@ function writeName() {
 			spare: false,
 			strike: false
 			},
-		11: 0,
-		12: 0
+		11: "-",
+		12: "-"
 	};
 	game.push(playerScore);
 	console.log(game);
@@ -155,19 +155,18 @@ function gameOn() {
 }
 
 function submitScore() {
-	
 	scoreButton = document.getElementById('scoreButton');
 	comment = document.getElementById('comment');
 
 	if(frameCounter < 11) {	
-	if(!verifySubmittedScore(scoreField.value)) 
-		return;
+		if(!verifySubmittedScore(scoreField.value)) 
+			return;
 
-	console.log("frame counter " + frameCounter);
-	console.log("player counter " + playerCounter);
-	console.log("ball counter " + ballCounter);
-	maxPins = maxPins - scoreField.value;
-	comment.innerHTML = "...";
+		console.log("frame counter " + frameCounter);
+		console.log("player counter " + playerCounter);
+		console.log("ball counter " + ballCounter);
+		maxPins = maxPins - scoreField.value;
+		comment.innerHTML = "...";
 	
 		if((frameCounter != 1 && game[playerCounter][frameCounter-1]["strike"])) {
 			game[playerCounter]["currentScore"] += parseInt(scoreField.value);
@@ -194,63 +193,72 @@ function submitScore() {
 					else {
 						comment.innerHTML = "SPARE!";
 						game[playerCounter][frameCounter]["spare"] = true;
+						game[playerCounter][frameCounter][2] = "/";
 					}
 				}
-					game[playerCounter]["currentScore"] += parseInt(scoreField.value);
-					game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
+				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
 			
 				ballCounter = 1;
 				playerCounter++;							// next player
 				maxPins = 10;
-				if(playerCounter==playerNames.length) {
+				if(playerCounter == playerNames.length) {
 					playerCounter = 0;
 					frameCounter++;
-					if(parseInt(scoreField.value) != 10 && frameCounter == 11)
-						frameCounter += 2;
 				}
-			}			
-		
+			}
+		updateNews();
 		frameNumber.innerHTML = frameCounter;
 		ballNumber.innerHTML = ballCounter;
 		console.log(game);
-		console.log(game[playerCounter][1]);
-		console.log(game[playerCounter][1][1]);
 
 	}
 	// extra points possible
 	else {
-		// last spare - 1 extra round
-		if(game[playerCounter][frameCounter-1]["spare"]) {
-			if(scoreField.value == 10) {
-				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
-				game[playerCounter][frameCounter] += parseInt(scoreField.value);
+		if((game[playerCounter][10]["spare"] || game[playerCounter][10]["strike"]) && frameCounter != 13) {
+			if (parseInt(scoreField.value) < 0 || scoreField.value % 1 != 0) {
+				information.innerHTML = "Please input only integer values in the score indicating how many pins you have knocked over (max: 10).";
+				return;
 			}
-			frameCounter+=2;
-		}
-		// last strike - 2 extra rounds
-		else {
-			if(scoreField.value == 10) {
-				if(game[playerCounter][frameCounter-1]["strike"] && frameCounter == 11) {
+			// last spare - 1 extra round
+			if(game[playerCounter][10]["spare"]) {
+				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+				game[playerCounter][frameCounter] = parseInt(scoreField.value);
+				frameCounter++;
+			}
+			// last strike - 2 extra rounds
+			else {
+				if(frameCounter == 11) {
 					game[playerCounter]["currentScore"] += parseInt(scoreField.value) * 2;
-					game[playerCounter][frameCounter] += parseInt(scoreField.value) * 2;
 				}
-				else {
+				else 
 				 	game[playerCounter]["currentScore"] += parseInt(scoreField.value);
-					game[playerCounter][frameCounter] += parseInt(scoreField.value);
-				}
+				game[playerCounter][frameCounter] = parseInt(scoreField.value);
 			}
 			frameCounter++;
 		}
+		if(frameCounter == 13 && playerCounter+1 != playerNames.length) {
+			frameCounter = 11;
+			playerCounter++;
+			console.log("wooooooooooooooooooooooooooo");
+		}
+		updateNews();
 	}		
-	updateBoard();
-	information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
-	if(frameCounter == 13)	{
+
+	console.log(game);
+	if(frameCounter == 13 && playerCounter+1 == playerNames.length)	{
 			frameNumber.innerHTML = "-- GAME COMPLETE --";
 			ballNumber.innerHTML = "-- GAME COMPLETE --";
 			endGame();
 		}
 	scoreField.value = "";
 	scoreField.focus();
+}
+
+function updateNews() {
+	updateBoard();
+	information.innerHTML = "Score recorded. " +  playerNames[playerCounter].toString() + ", please enter your score.";
+	frameNumber.innerHTML = frameCounter;
+	ballNumber.innerHTML = ballCounter;
 }
 
 function verifySubmittedScore(score) {
