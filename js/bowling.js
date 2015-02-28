@@ -127,6 +127,7 @@ function writeName() {
 		nameField.disabled = true;
 		information.innerHTML = information.innerHTML + " That's the maximum number of players - let's start the game!";
     }
+	players_printed.innerHTML = playerNames.toString();
 	userName.value="";
 	userName.focus();
 }
