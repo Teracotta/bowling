@@ -1,3 +1,8 @@
+/*
+ * bowling.js | JavaScript Virtual Bowling Scoring System
+ *
+ * Copyright 2015 Maja Gorzkowicz <gorzkowicz.maja@gmail.com> All rights reserved.
+ */
 var playerNames = new Array();
 var game = new Array();
 var playerScore;
