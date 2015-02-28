@@ -37,7 +37,7 @@ function writeName() {
 	playerNames.push(userName.value);
 	playerScore = {
 		name: userName.value, 
-		currentScore: 0,
+		totalScore: 0,
 		1: {
 			1: 0,
 			2: 0,
@@ -169,17 +169,17 @@ function submitScore() {
 		comment.innerHTML = "...";
 	
 		if((frameCounter != 1 && game[playerCounter][frameCounter-1]["strike"])) {
-			game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 				if((frameCounter != 2 && ballCounter != 2 && game[playerCounter][frameCounter-2]["strike"]))
-					game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+					game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 		}
 
 		if((frameCounter != 1 && game[playerCounter][frameCounter-1]["spare"]) && ballCounter == 1) {
-			game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+			game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 		}
 			if(ballCounter+1 != 3 && maxPins != 0) {		// next ball
 				game[playerCounter][frameCounter][ballCounter] = parseInt(scoreField.value);
-				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 				ballCounter++;
 			}
 			else {
@@ -196,7 +196,7 @@ function submitScore() {
 						game[playerCounter][frameCounter][2] = "/";
 					}
 				}
-				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 			
 				ballCounter = 1;
 				playerCounter++;							// next player
@@ -221,17 +221,17 @@ function submitScore() {
 			}
 			// last spare - 1 extra round
 			if(game[playerCounter][10]["spare"]) {
-				game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+				game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 				game[playerCounter][frameCounter] = parseInt(scoreField.value);
 				frameCounter++;
 			}
 			// last strike - 2 extra rounds
 			else {
 				if(frameCounter == 11) {
-					game[playerCounter]["currentScore"] += parseInt(scoreField.value) * 2;
+					game[playerCounter]["totalScore"] += parseInt(scoreField.value) * 2;
 				}
 				else 
-				 	game[playerCounter]["currentScore"] += parseInt(scoreField.value);
+				 	game[playerCounter]["totalScore"] += parseInt(scoreField.value);
 				game[playerCounter][frameCounter] = parseInt(scoreField.value);
 			}
 			frameCounter++;
@@ -295,7 +295,23 @@ function updateBoard() {
         for(var j = 1; j <= 10; j++) 
         	text += "<td>" + game[i][j][1] + "</td><td>" + game[i][j][2] + "</td>";
         text += "<td>" + game[i][11] + "</td><td>" + game[i][12] + "</td>";
-        text += "<td>" + game[i]["currentScore"] + "</td></tr>";
+        text += "<td>" + game[i]["totalScore"] + "</td></tr>";
     }
     scoreBoard.innerHTML = text;
+}
+
+function restart() {
+	playerNames = new Array();
+	game = new Array();
+	updateBoard();
+	namePanel.hidden = false;
+	nameField.hidden = false;
+	startPanel.hidden = false;
+	startButton.disabled = true;
+	gamePanel.hidden = true;
+	playerCounter = 0;
+	frameCounter = 1;
+	ballCounter = 1;
+	players_printed.innerHTML = "None";
+	information.innerHTML = "The game has been restarted. Welcome to the Virtual Bowling Scoring System!"
 }
