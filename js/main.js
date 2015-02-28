@@ -104,7 +104,6 @@ function writeName() {
 		12: "-"
 	};
 	game.push(playerScore);
-	console.log(game);
 	information.innerHTML = "Player registered.";
 
 	if(checkIfCorrectNumberOfPlayers(playerNames.length) == "enough") {
@@ -168,10 +167,6 @@ function submitScore() {
 	if(frameCounter < 11) {	
 		if(!verifySubmittedScore(scoreField.value)) 
 			return;
-
-		console.log("frame counter " + frameCounter);
-		console.log("player counter " + playerCounter);
-		console.log("ball counter " + ballCounter);
 		maxPins = maxPins - scoreField.value;
 		comment.innerHTML = "...";
 	
@@ -218,8 +213,6 @@ function submitScore() {
 		updateNews();
 		frameNumber.innerHTML = frameCounter;
 		ballNumber.innerHTML = ballCounter;
-		console.log(game);					
-		console.log(noExtraRounds);
 	}
 	// extra points possible
 	else {
@@ -278,8 +271,6 @@ function submitScore() {
 			return;
 		}
 	}
-
-	console.log(game);
 	if((frameCounter == 13 && playerCounter+1 == playerNames.length && noExtraRounds) || (playerCounter >= playerNames.length)	){
 		endGame();
 	}
@@ -289,7 +280,6 @@ function submitScore() {
 
 function checkIfPlayerHasExtraRounds() {
 	if(!game[playerCounter][10]["spare"] && !game[playerCounter][10]["strike"]) {
-		console.log("DUH");
 		playerCounter++;
 		if(playerCounter == game.length)
 			endGame();
@@ -365,8 +355,6 @@ function endGame() {
 	var topPlayers = new Array();
 	for (var i = 0; i < game.length; i++) topPlayers[i] = "";
 
-	console.log(topPlayers);
-	console.log(topScores);
 	frameNumber.innerHTML = "-- GAME COMPLETE --";
 	ballNumber.innerHTML = "-- GAME COMPLETE --";
 
@@ -383,18 +371,16 @@ function endGame() {
 		}		
 
 	}
-		console.log(topPlayers);
-	console.log(topScores);
 
 	if(topScores.length == 1)
 		information.innerHTML = "All the scores are now recorded! And the winner is " + topPlayers[0] + " with score " + topScores[0] + ". Congratulations!";
-	else if(topScores.length = game.length)
+	else if(topScores.length == game.length)
 		information.innerHTML = "All the scores are now recorded! Everyone has the top score, everyone is a winner! Congratulations!";
 	else {
 		information.innerHTML = "All the scores are now recorded! There is more than one winner! They are: ";
 		for(var i = 0; i < topScores.length; i++)
-			information.innerHTML += topPlayers[i] + " (score " + topScores[i] + "),";
-		information.innerHTML = information.innerHTML.value.replace(/,$/, "") + ". Congratulations !";
+			information.innerHTML += topPlayers[i] + " (score: " + topScores[i] + "),";
+		information.innerHTML = information.innerHTML.value.replace(/, $/, "") + ". Congratulations !";
 	}
 	scoreField.disabled = true;
 	scoreButton.disabled = true;
