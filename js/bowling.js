@@ -349,8 +349,8 @@ function updateBoard() {
 *	This function restarts/resets the game - removes all the data stored thus far, sets the DOM's state to
 *	what it was before the game begun (i.e. being disabled, focused, hidden, etc.).
 */
-function restart() {
-	if (confirm("You are about to completely restart the game. Continue?")) {
+function reset() {
+	if (confirm("You are about to completely reset the game. Continue?")) {
 	   	playerNames = new Array();
 		game = new Array();
 		updateBoard();
