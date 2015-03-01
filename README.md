@@ -10,6 +10,10 @@ bowling/
 ├── css/
 │   └── bowling.css
 ├── js/
+│   ├── tests
+│   │   ├── pseudocodeTest.js
+│   │   ├── conf.js
+│   │   └── spec.js
 │   └── bowling.js
 └── not_working_php/
     ├── main.html
